@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderlust</title>
+</head>
+
+<body>
+    <h1>Wanderlust</h1>
+    <p>Welcome to the Wanderlust!</p>
+    <form action="/listings/new" method="GET">
+        <button>new</button>
+    </form>
+    <ul>
+        <% for (const listing of allListings) { %>
+            <li>
+                <a href="/listings/<%= listing._id %>">
+                    <%= listing.title %>
+                </a>
+                    - &#8377;<%= listing.price.toLocaleString("en-IN") %>
+            </li>
+            <% } %>
+    </ul>
+    </div>
+</body>
+
+</html>

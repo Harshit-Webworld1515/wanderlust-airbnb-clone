@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wanderlust</title>
+</head>
+<body>
+    <h1>Listing Details</h1>
+    <ul>
+        <li><strong>Title:</strong> <%= foundListing.title %></li>
+        <li><strong>Description:</strong> <%= foundListing.description %></li>
+        <li><strong>Image:</strong> <img src="<%= foundListing.url %>" alt="<%= foundListing.title %>"></li>
+        <li><strong>Price:</strong> &#8377;<%= foundListing.price.toLocaleString("en-IN") %></li>
+        <li><strong>Location:</strong> <%= foundListing.location %></li>
+        <li><strong>Country:</strong> <%= foundListing.country %></li>
+    </ul>
+    <a href="/listings/<%= foundListing._id %>/edit">Edit this listing</a>
+    <br>><br>
+    <form action="/listings/<%= foundListing._id %>?_method=DELETE" method="POST">
+        <button>Delete this listing</button>
+    </form>
+</body>
+</html>

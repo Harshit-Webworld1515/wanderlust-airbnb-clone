@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderlust_edit</title>
+</head>
+<body>
+    <h1>Edit Listing</h1>
+    <form action="/listings/<%= edited._id %>?_method=PUT" method="POST">
+        <label for="title">Enter title</label>
+        <input type="text" name="title" id="title" value="<%= edited.title %>" required><br><br>
+        <label for="description">Enter description</label>
+        <input type="text" name="description" id="description" value="<%= edited.description %>" required><br><br>
+        <label for="url">Enter image url</label>
+        <input type="text" name="url" id="url" value="<%= edited.url %>"><br><br>
+        <label for="price">Enter price</label>
+        <input type="number" name="price" id="price" value="<%= edited.price %>" required><br><br>
+        <label for="location">Enter location</label>
+        <input type="text" name="location" id="location" value="<%= edited.location %>" required><br><br>
+        <label for="country">Enter country</label>
+        <input type="text" name="country" id="country" value="<%= edited.country %>" required>
+        <button type="submit">Update Listing</button>
+    </form>
+</body>
+</html>
