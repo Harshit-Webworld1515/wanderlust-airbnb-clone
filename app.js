@@ -87,6 +87,7 @@ app.put('/listings/:id', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error from PUT /listings/:id' });
     }   
 });
+// Delete Route
 app.delete('/listings/:id', async (req, res) => {
     try {
         const { id } = req.params;
