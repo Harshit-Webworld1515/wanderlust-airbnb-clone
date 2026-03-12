@@ -1,0 +1,16 @@
+/* body{
+    background-color: #d3f4a8;
+} */
+ .navbar{
+    height: 5rem;
+    background-color: #fff;
+     /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);   */
+}
+.fa-compass{
+    color: red;
+    font-size: 2rem;
+}
+.nav-link{
+    font-size: 1.2rem;
+    color: #222 !important;
+}

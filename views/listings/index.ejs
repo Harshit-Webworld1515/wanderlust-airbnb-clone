@@ -1,18 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wanderlust</title>
-</head>
-
+<% layout('layouts/boilerplate') %>
 <body>
     <h1>Wanderlust</h1>
     <p>Welcome to the Wanderlust!</p>
-    <form action="/listings/new" method="GET">
+    <!-- <form action="/listings/new" method="GET">
         <button>new</button>
-    </form>
+    </form> --> <!-- This is just a temporary button to test the route, we will replace it with a link in the navbar later -->
     <ul>
         <% for (const listing of allListings) { %>
             <li>
@@ -25,5 +17,3 @@
     </ul>
     </div>
 </body>
-
-</html>

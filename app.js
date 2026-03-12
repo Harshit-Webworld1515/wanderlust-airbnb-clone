@@ -4,20 +4,18 @@ const mongoose = require('mongoose');
 const ejs = require('ejs');
 const listing = require('./models/listing');
 const path = require('path');
+const ejsMate = require('ejs-mate');
 
-
+app.engine('ejs', ejsMate); 
 app.set('view engine', 'ejs');
 const methodOverride = require("method-override");
 app.use(methodOverride("_method"));
 app.set('views', path.join(__dirname, 'views'));
 app.use(expess.urlencoded({ extended: true }));
+app.use(expess.static(path.join(__dirname, '/public')));
 
 app.listen(8080, () => {
     console.log('Server is running on port 8080');
-});
-app.get('/', async (req, res) => {
-    let listings = await listing.find();
-    res.send(listings);
 });
 async function main() {
     await mongoose.connect('mongodb://localhost:27017/wanderlust');
@@ -28,7 +26,12 @@ main().then(() => {
 }).catch(err => {
     console.error('Database connection error:', err);
 });
-
+// Root route
+app.get('/', async (req, res) => {
+    let listings = await listing.find();
+    res.send(listings);
+});
+// Index route(list all the listings)  Read route
 app.get('/listings', async (req, res) => {
     try {
         const allListings = await listing.find();  
@@ -42,7 +45,7 @@ app.get('/listings', async (req, res) => {
 // new route
 app.get('/listings/new',async(req,res)=>{
     res.render('listings/new');
-})
+})// Create route
 app.post('/listings', async (req, res) => {
     try {
         const newListing = new listing(req.body);
@@ -76,7 +79,7 @@ app.get('/listings/:id/edit', async (req, res) => {
         console.error('Error fetching listing for edit:', err);
         res.status(500).json({ error: 'Internal Server Error /listings/:id/edit' });
     }
-});
+});// Update Route
 app.put('/listings/:id', async (req, res) => {
     try {
         const { id } = req.params;
