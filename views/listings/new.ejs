@@ -1,19 +1,41 @@
 <% layout('layouts/boilerplate') %>
-<body>
-    <h1>New Location</h1>
-    <form action="/listings" method="POST">
-        <label for="title">Enter title</label>
-        <input type="text" name="title" id="title" required><br><br>
-        <label for="description">Enter description</label>
-        <input type="text" name="description" id="description" required><br><br>
-        <label for="url">Enter image url</label>
-        <input type="text" name="url" id="url"><br><br>
-        <label for="price">Enter price</label>
-        <input type="number" name="price" id="price" required><br><br>
-        <label for="location">Enter location</label>
-        <input type="text" name="location" id="location" required><br><br>
-        <label for="country">Enter country</label>
-        <input type="text" name="country" id="country" required>
-        <button type="submit">Create Listing</button>
-    </form>
-</body>
+
+    <body>
+        <br>
+        <div class="row">
+            <div class="col-8 offset-2">
+                <h1>New Location</h1>
+                <form action="/listings" method="POST">
+                    <div>
+                        <label for="title" class="form-label">Enter title</label>
+                        <input type="text" name="title" id="title" class="form-control" required><br>
+                    </div>
+                    <div>
+                        <label for="description" class="form-label">Enter description</label>
+                        <input type="text" name="description" id="description" class="form-control" required><br>
+                    </div>
+                    <div>
+                        <label for="url" class="form-label">Enter image url</label>
+                        <input type="text" name="url" id="url" class="form-control">
+                        <br>
+                    </div>
+                    <div class="row">     
+                        <div class="col-md-4">
+                            <label for="price" class="form-label">Enter price</label>
+                            <input type="number" name="price" id="price" class="form-control" required><br>
+                        </div>
+                        <div class="col-md-8">
+                            <label for="country" class="form-label">Enter country</label>
+                            <input type="text" name="country" id="country" class="form-control" required><br>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="location" class="form-label">Enter location</label>
+                        <input type="text" name="location" id="location" class="form-control" required><br>
+                    </div>
+                    <button type="submit" class="btn btn-dark add-btn">Create Listing</button>
+                </form>
+            </div>
+        </div>
+        <br>
+    </body>
