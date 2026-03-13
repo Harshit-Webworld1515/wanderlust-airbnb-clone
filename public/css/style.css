@@ -95,3 +95,9 @@ body{
     background-color: #fe424d !important;
     border: none !important;
 }
+/* edit */
+.edit-btn {
+    background-color: #fe424d !important;
+    border: none !important;
+    margin-top: 1rem;
+}
