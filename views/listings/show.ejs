@@ -1,18 +1,35 @@
 <% layout('layouts/boilerplate') %>
-<body>
-    <h1>Listing Details</h1>
-    <ul>
-        <li><strong>Title:</strong> <%= foundListing.title %></li>
-        <li><strong>Description:</strong> <%= foundListing.description %></li>
-        <li><strong>Image:</strong> <img src="<%= foundListing.url %>" alt="<%= foundListing.title %>"></li>
-        <li><strong>Price:</strong> &#8377;<%= foundListing.price.toLocaleString("en-IN") %></li>
-        <li><strong>Location:</strong> <%= foundListing.location %></li>
-        <li><strong>Country:</strong> <%= foundListing.country %></li>
-    </ul>
-    <a href="/listings/<%= foundListing._id %>/edit">Edit this listing</a>
-    <br>><br>
-    <form action="/listings/<%= foundListing._id %>?_method=DELETE" method="POST">
-        <button>Delete this listing</button>
-    </form>
-</body>
-<!-- -</html> --- IGNORE --- -->
+
+    <body>
+
+        <div class="row mt-3">
+            <div class="col-8 offset-3">
+                <h1>Listing Details</h1>
+            </div>
+            <div class="card col-6 offset-3 show-card">
+                <img src="<%= foundListing.image.url %>" class="card-img-top show-img" alt="<%= foundListing.title %>">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <%= foundListing.title %>
+                    </h5>
+                    <p class="card-text">
+                        <%= foundListing.description %> <br>
+                            <%= foundListing.price.toLocaleString("en-IN") %>/night <br>
+                                <%= foundListing.location %>,<br>
+                                    <%= foundListing.country %>
+                    </p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+
+            <div class="btns mb-3">
+                <a class="btn btn-dark offset-3" href="/listings/<%= foundListing._id %>/edit">Edit</a>
+                <form action="/listings/<%= foundListing._id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-dark offset-5">Delete</button>
+                </form>
+            </div>
+        </div>
+
+
+    </body>
+    <!-- -</html> --- IGNORE --- -->

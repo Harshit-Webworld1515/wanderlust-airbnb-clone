@@ -64,7 +64,7 @@ body{
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
 }
 .card-img-top {
-    height: 200px;
+    /* height: 200px; */
     object-fit: cover;
     border-radius: 1rem;
     width: 100% !important;
@@ -100,4 +100,16 @@ body{
     background-color: #fe424d !important;
     border: none !important;
     margin-top: 1rem;
+}
+.show-img {
+    height: 30vh;
+}
+.btns {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}   
+.show-card {
+    padding-left: 0rem !important;
+    padding-right: 0rem !important;
 }

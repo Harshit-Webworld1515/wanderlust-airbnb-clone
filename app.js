@@ -83,7 +83,7 @@ app.get('/listings/:id/edit', async (req, res) => {
 app.put('/listings/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        await listing.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
+        await listing.findByIdAndUpdate(id, req.body, { returnDocument: "after", runValidators: true });
         res.redirect(`/listings`);
     } catch (err) {
         console.error('Error updating listing:', err);
