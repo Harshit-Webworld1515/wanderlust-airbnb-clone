@@ -1,19 +1,29 @@
 <% layout('layouts/boilerplate') %>
-<body>
-    <h1>Wanderlust</h1>
-    <p>Welcome to the Wanderlust!</p>
-    <!-- <form action="/listings/new" method="GET">
+
+    <body>
+        <h1>Wanderlust</h1>
+        <p>Welcome to the Wanderlust!</p>
+        <!-- <form action="/listings/new" method="GET">
         <button>new</button>
-    </form> --> <!-- This is just a temporary button to test the route, we will replace it with a link in the navbar later -->
-    <ul>
-        <% for (const listing of allListings) { %>
-            <li>
-                <a href="/listings/<%= listing._id %>">
-                    <%= listing.title %>
+    </form> -->
+        <!-- This is just a temporary button to test the route, we will replace it with a link in the navbar later -->
+
+
+        <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4">
+            <% for (const listing of allListings) { %>
+                <a href="/listings/<%= listing._id %>" class="listing-link">
+                    <div class="card col">
+                        <img src="<%= listing.image.url %>" class="card-img-top" alt="listing image"
+                            style="height: 20rem;">
+                            <!-- card overlay image -->
+                            <div class="card-img-overlay">Ram </div>
+                        <div class="card-body">
+                            <p class="card-text"><strong>
+                                    <%= listing.title %>
+                                </strong> <br>₹<%= listing.price.toLocaleString("en-IN") %>/night</p>
+                        </div>
+                    </div>
                 </a>
-                    - &#8377;<%= listing.price.toLocaleString("en-IN") %>
-            </li>
-            <% } %>
-    </ul>
-    </div>
-</body>
+                <% } %>
+        </div>
+    </body>
