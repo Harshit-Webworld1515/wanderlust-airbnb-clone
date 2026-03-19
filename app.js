@@ -1,18 +1,18 @@
-const expess = require('express');
-const app = expess();
+const express = require('express');
+const app = express();
 const mongoose = require('mongoose');
 const ejs = require('ejs');
 const listing = require('./models/listing');
 const path = require('path');
 const ejsMate = require('ejs-mate');
 
-app.engine('ejs', ejsMate); 
+app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 const methodOverride = require("method-override");
 app.use(methodOverride("_method"));
 app.set('views', path.join(__dirname, 'views'));
-app.use(expess.urlencoded({ extended: true }));
-app.use(expess.static(path.join(__dirname, '/public')));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, '/public')));
 
 app.listen(8080, () => {
     console.log('Server is running on port 8080');
@@ -34,27 +34,27 @@ app.get('/', async (req, res) => {
 // Index route(list all the listings)  Read route
 app.get('/listings', async (req, res) => {
     try {
-        const allListings = await listing.find();  
+        const allListings = await listing.find();
         // console.log('Fetched listings:', allListings);
         res.render('listings/index', { allListings });
-    }catch (err){
+    } catch (err) {
         console.error('Error fetching listings: from /listings', err);
         res.status(500).json({ error: 'Internal Server Error from /listings' });
-    }       
+    }
 });
 // new route
-app.get('/listings/new',async(req,res)=>{
+app.get('/listings/new', async (req, res) => {
     res.render('listings/new');
 })// Create route
 app.post('/listings', async (req, res) => {
     try {
-        const newListing = new listing(req.body);
+        const newListing = new listing(req.body.listing)
         console.log('New listing data:', req.body);
         await newListing.save();
         res.redirect('/listings');
     } catch (err) {
         console.error('Error creating listing:', err);
-        res.status(500).json({ error: 'Internal Server Error from POST /listings' });
+        res.status(500).send(err.message);
     }
 });
 
@@ -71,11 +71,11 @@ app.get('/listings/:id', async (req, res) => {
 });
 // Edit Route
 app.get('/listings/:id/edit', async (req, res) => {
-    try{
-    const edited=await listing.findById(req.params.id);
-    res.render('listings/edit',{edited});
+    try {
+        const edited = await listing.findById(req.params.id);
+        res.render('listings/edit', { edited });
     }
-    catch(err){
+    catch (err) {
         console.error('Error fetching listing for edit:', err);
         res.status(500).json({ error: 'Internal Server Error /listings/:id/edit' });
     }
@@ -88,7 +88,7 @@ app.put('/listings/:id', async (req, res) => {
     } catch (err) {
         console.error('Error updating listing:', err);
         res.status(500).json({ error: 'Internal Server Error from PUT /listings/:id' });
-    }   
+    }
 });
 // Delete Route
 app.delete('/listings/:id', async (req, res) => {
