@@ -7,56 +7,46 @@
 
                 <form action="/listings/<%= edited._id %>?_method=PUT" method="POST" novalidate
                     class="needs-validation">
+
                     <div>
                         <label for="title" class="form-label">Enter title</label>
-                        <input type="text" class="form-control" name="title" id="title" value="<%= edited.title %>"
-                            required>
+                        <input type="text" class="form-control" name="listing[title]" id="title"
+                            value="<%= edited.title %>" required>
                     </div>
+
                     <div>
                         <label for="description" class="form-label">Enter description</label>
-                        <input type="text" class="form-control" name="description" id="description"
+                        <input type="text" class="form-control" name="listing[description]" id="description"
                             value="<%= edited.description %>" required>
                     </div>
+
                     <div>
                         <label for="url" class="form-label">Enter image url</label>
-                        <input type="text" class="form-control" name="url" id="url" value="<%= edited.image.url %>">
+                        <input type="text" class="form-control" name="listing[image][url]" id="url"
+                            value="<%= edited.image.url %>">
                     </div>
+
                     <div class="row">
                         <div class="col-md-4">
                             <label for="price" class="form-label">Enter price</label>
-                            <input type="number" class="form-control" name="price" id="price"
+                            <input type="number" class="form-control" name="listing[price]" id="price"
                                 value="<%= edited.price %>" required>
-                            <div class="invalid-feedback">
-                                Price field is empty!
-                            </div>
-                            <div class="valid-feedback">
-                                Valid!
-                            </div>
                         </div>
+
                         <div class="col-md-8">
                             <label for="country" class="form-label">Enter country</label>
-                            <input type="text" class="form-control" name="country" id="country"
+                            <input type="text" class="form-control" name="listing[country]" id="country"
                                 value="<%= edited.country %>" required>
-                            <div class="invalid-feedback">
-                                Country field is empty!
-                            </div>
-                            <div class="valid-feedback">
-                                Valid!
-                            </div>
                         </div>
                     </div>
+
                     <div>
                         <label for="location" class="form-label">Enter location</label>
-                        <input type="text" class="form-control" name="location" id="location"
+                        <input type="text" class="form-control" name="listing[location]" id="location"
                             value="<%= edited.location %>" required>
-                        <div class="invalid-feedback">
-                            Location field is empty!
-                        </div>
-                        <div class="valid-feedback">
-                            Valid!
-                        </div>
                     </div>
-                    <button type="submit" class="btn btn-dark edit-btn ">Update Listing</button>
+
+                    <button type="submit" class="btn btn-dark edit-btn">Update Listing</button>
                 </form>
             </div>
         </div>

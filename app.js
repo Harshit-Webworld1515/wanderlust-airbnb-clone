@@ -5,6 +5,9 @@ const ejs = require('ejs');
 const listing = require('./models/listing');
 const path = require('path');
 const ejsMate = require('ejs-mate');
+const wrapAsync = require("./utils/wrapAsync.js")
+const ExpressError = require("./utils/ExpressError.js")
+const { listingSchema } = require("./schema.js")
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
@@ -14,9 +17,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '/public')));
 
-app.listen(8080, () => {
-    console.log('Server is running on port 8080');
-});
 async function main() {
     await mongoose.connect('mongodb://localhost:27017/wanderlust');
     console.log('Connected to MongoDB');
@@ -45,59 +45,76 @@ app.get('/listings', async (req, res) => {
 // new route
 app.get('/listings/new', async (req, res) => {
     res.render('listings/new');
-})// Create route
-app.post('/listings', async (req, res) => {
-    try {
-        const newListing = new listing(req.body.listing)
-        console.log('New listing data:', req.body);
-        await newListing.save();
-        res.redirect('/listings');
-    } catch (err) {
-        console.error('Error creating listing:', err);
-        res.status(500).send(err.message);
+})
+// Create route
+app.post('/listings', wrapAsync(async (req, res, next) => {
+    //When we make req from hopscotch without giving any data
+    // if ( !req.body.listing) {
+    //     throw new ExpressError("Send valid data for listing", 400);
+    // }
+
+    //joi package
+    let result = listingSchema.validate(req.body);
+    console.log(result);
+    if (result.error) {
+        throw new ExpressError(result.error, 400)
     }
-});
+    const newListing = new listing(req.body.listing)
+    console.log('New listing data:', req.body);
+    //if we make post fro hopscotch give only listing[title]Then we need to makesure everything is needed
+    //(npm i joi) is the most powerful schema description language and data validator for JavaScript.
+    // if (!newListing.title) {
+    //     throw new ExpressError('Plz send title in Form body',400)
+    // }
+    // if (!newListing.description) {
+    //     throw new ExpressError('Plz send description in Form body',400)
+    // }
+    // if (!newListing.location) {
+    //     throw new ExpressError('Plz send location in Form body',400)
+    // }
+
+    await newListing.save();
+    res.redirect('/listings');
+}));
 
 //show route
-app.get('/listings/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        const foundListing = await listing.findById(id);
-        res.render('listings/show', { foundListing });
-    } catch (err) {
-        console.error('Error fetching listing:', err);
-        res.status(500).json({ error: 'Internal Server Error /listings/:id' });
-    }
-});
+app.get('/listings/:id', wrapAsync(async (req, res) => {
+
+    const { id } = req.params;
+    const foundListing = await listing.findById(id);
+    res.render('listings/show', { foundListing });
+}));
 // Edit Route
-app.get('/listings/:id/edit', async (req, res) => {
-    try {
-        const edited = await listing.findById(req.params.id);
-        res.render('listings/edit', { edited });
+app.get('/listings/:id/edit', wrapAsync(async (req, res) => {
+    const edited = await listing.findById(req.params.id);
+    res.render('listings/edit', { edited });
+}));
+// Update Route
+app.put('/listings/:id', wrapAsync(async (req, res) => {
+    if (!req.body.listing) {
+        throw new ExpressError("Send valid data for listing", 400);
     }
-    catch (err) {
-        console.error('Error fetching listing for edit:', err);
-        res.status(500).json({ error: 'Internal Server Error /listings/:id/edit' });
-    }
-});// Update Route
-app.put('/listings/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        await listing.findByIdAndUpdate(id, req.body, { returnDocument: "after", runValidators: true });
-        res.redirect(`/listings`);
-    } catch (err) {
-        console.error('Error updating listing:', err);
-        res.status(500).json({ error: 'Internal Server Error from PUT /listings/:id' });
-    }
-});
+    const { id } = req.params;
+    await listing.findByIdAndUpdate(id, ...req.body.listing, { returnDocument: "after", runValidators: true });
+    res.redirect(`/listings`);
+
+}));
 // Delete Route
-app.delete('/listings/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        await listing.findByIdAndDelete(id);
-        res.redirect('/listings');
-    } catch (err) {
-        console.error('Error deleting listing:', err);
-        res.status(500).json({ error: 'Internal Server Error from DELETE /listings/:id' });
-    }
+app.delete('/listings/:id', wrapAsync(async (req, res) => {
+    const { id } = req.params;
+    await listing.findByIdAndDelete(id);
+    res.redirect('/listings');
+}));
+app.use((req, res, next) => {
+    next(new ExpressError("This page isn't exist on this Route", 404));
+});
+//Error handling Middleware
+app.use((err, req, res, next) => {
+    const { status = 500, message } = err;
+    console.log(err.name);
+    res.status(status).render('listings/error', { err })
+    // res.status(status).send(err.message);
+})
+app.listen(8080, () => {
+    console.log('Server is running on port 8080');
 });
