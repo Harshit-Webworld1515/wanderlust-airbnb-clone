@@ -18,6 +18,9 @@
                         <label for="description" class="form-label">Enter description</label>
                         <input type="text" class="form-control" name="listing[description]" id="description"
                             value="<%= edited.description %>" required>
+                        <div class="invalid-feedback">
+                            Enter a short description
+                        </div>
                     </div>
 
                     <div>
@@ -44,6 +47,9 @@
                         <label for="location" class="form-label">Enter location</label>
                         <input type="text" class="form-control" name="listing[location]" id="location"
                             value="<%= edited.location %>" required>
+                        <div class="invalid-feedback">
+                            Location field is empty!
+                        </div>
                     </div>
 
                     <button type="submit" class="btn btn-dark edit-btn">Update Listing</button>
