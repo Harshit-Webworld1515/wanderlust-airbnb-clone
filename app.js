@@ -7,7 +7,7 @@ const path = require('path');
 const ejsMate = require('ejs-mate');
 const wrapAsync = require("./utils/wrapAsync.js")
 const ExpressError = require("./utils/ExpressError.js")
-const { listingSchema } = require("./schema.js")
+const { listingSchema } = require("./schema.js") //joi Package
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
@@ -31,6 +31,16 @@ app.get('/', async (req, res) => {
     let listings = await listing.find();
     res.send(listings);
 });
+//joi package used for server validation
+const validateListing = (req, res, next) => {
+    let {error} = listingSchema.validate(req.body);
+    console.log(error);
+    if (error) {
+        throw new ExpressError(error, 400)
+    }else{
+        next();
+    }
+}
 // Index route(list all the listings)  Read route
 app.get('/listings', async (req, res) => {
     try {
@@ -47,18 +57,14 @@ app.get('/listings/new', async (req, res) => {
     res.render('listings/new');
 })
 // Create route
-app.post('/listings', wrapAsync(async (req, res, next) => {
+app.post('/listings',validateListing ,wrapAsync(async (req, res, next) => {
     //When we make req from hopscotch without giving any data
     // if ( !req.body.listing) {
     //     throw new ExpressError("Send valid data for listing", 400);
     // }
 
-    //joi package
-    let result = listingSchema.validate(req.body);
-    console.log(result);
-    if (result.error) {
-        throw new ExpressError(result.error, 400)
-    }
+    
+
     const newListing = new listing(req.body.listing)
     console.log('New listing data:', req.body);
     //if we make post fro hopscotch give only listing[title]Then we need to makesure everything is needed
@@ -111,7 +117,7 @@ app.use((req, res, next) => {
 //Error handling Middleware
 app.use((err, req, res, next) => {
     const { status = 500, message } = err;
-    console.log(err.name);
+    console.log(err.message);
     res.status(status).render('listings/error', { err })
     // res.status(status).send(err.message);
 })
