@@ -4,14 +4,13 @@
 
         <div class="row mt-3">
             <div class="col-8 offset-3">
-                <h1>Listing Details</h1>
+                <h1>
+                    <%= foundListing.title %>
+                </h1>
             </div>
             <div class="card col-6 offset-3 show-card">
                 <img src="<%= foundListing.image.url %>" class="card-img-top show-img" alt="<%= foundListing.title %>">
                 <div class="card-body">
-                    <h5 class="card-title">
-                        <%= foundListing.title %>
-                    </h5>
                     <p class="card-text">
                         <%= foundListing.description %> <br>
                             <%= foundListing.price.toLocaleString("en-IN") %>/night <br>
@@ -26,6 +25,21 @@
                 <a class="btn btn-dark offset-3" href="/listings/<%= foundListing._id %>/edit">Edit</a>
                 <form action="/listings/<%= foundListing._id %>?_method=DELETE" method="POST">
                     <button class="btn btn-dark offset-5">Delete</button>
+                </form>
+            </div>
+            <div class="col-8 offset-3">
+                <hr>
+                <h4> Leave a Review </h4>
+                <form action="/listings/<%=foundListing._id%>/reviews " method="POST">
+                    <div class=" mb-3 mt-3">
+                        <label for="rating" class="form-label">Rating</label>
+                        <input type="range" class="form-range" min="1" max="5" id="rating" name="review[rating]">
+                    </div>
+                    <div class="mb-3 mt-3">
+                        <label for="comment" class="form-label">Comments</label>
+                        <textarea name="review[comment]" class="form-control" id="comment" cols="30" rows="5"></textarea>
+                    </div>
+                    <button class=" btn btn-outline-dark mb-3">Submit</button>
                 </form>
             </div>
         </div>

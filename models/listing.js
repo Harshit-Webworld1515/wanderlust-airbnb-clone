@@ -20,7 +20,11 @@ const listingSchema = new mongoose.Schema({
             : value,
       }
    },
-   country: String
+   country: String,
+   reviews:[{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"Review"
+   }]
 });
 const Listing = mongoose.model('Listing', listingSchema);
 module.exports = Listing;   

@@ -3,15 +3,18 @@ const app = express();
 const mongoose = require('mongoose');
 const ejs = require('ejs');
 const listing = require('./models/listing');
+//Jo naam tum require me dete ho → wahi naam se tum Mongo operations karoge
 const path = require('path');
 const ejsMate = require('ejs-mate');
 const wrapAsync = require("./utils/wrapAsync.js")
 const ExpressError = require("./utils/ExpressError.js")
 const { listingSchema } = require("./schema.js") //joi Package
+const Review = require('./models/review.js')
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 const methodOverride = require("method-override");
+const Listing = require('./models/listing');
 app.use(methodOverride("_method"));
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
@@ -31,13 +34,13 @@ app.get('/', async (req, res) => {
     let listings = await listing.find();
     res.send(listings);
 });
-//joi package used for server validation
+//joi package used for server validation remove if-else Statement
 const validateListing = (req, res, next) => {
-    let {error} = listingSchema.validate(req.body);
+    let { error } = listingSchema.validate(req.body);
     console.log(error);
     if (error) {
         throw new ExpressError(error, 400)
-    }else{
+    } else {
         next();
     }
 }
@@ -57,13 +60,11 @@ app.get('/listings/new', async (req, res) => {
     res.render('listings/new');
 })
 // Create route
-app.post('/listings',validateListing ,wrapAsync(async (req, res, next) => {
+app.post('/listings', validateListing, wrapAsync(async (req, res, next) => {
     //When we make req from hopscotch without giving any data
     // if ( !req.body.listing) {
     //     throw new ExpressError("Send valid data for listing", 400);
     // }
-
-    
 
     const newListing = new listing(req.body.listing)
     console.log('New listing data:', req.body);
@@ -111,16 +112,29 @@ app.delete('/listings/:id', wrapAsync(async (req, res) => {
     await listing.findByIdAndDelete(id);
     res.redirect('/listings');
 }));
+
+//Reviews
+app.post('/listings/:id/reviews', wrapAsync(async (req, res) => {
+    let {id}=req.params
+    let revListing = await listing.findById(req.params.id);
+    let newreview = new Review(req.body.review);
+    revListing.reviews.push(newreview);
+    await newreview.save();
+    await revListing.save();
+    console.log("new Review saved")
+    res.redirect(`/listings/${id}`)
+}
+));
 app.use((req, res, next) => {
     next(new ExpressError("This page isn't exist on this Route", 404));
 });
 //Error handling Middleware
 app.use((err, req, res, next) => {
     const { status = 500, message } = err;
-    console.log(err.message);
+    console.log(err.stack);
     res.status(status).render('listings/error', { err })
     // res.status(status).send(err.message);
-})
+}) 
 app.listen(8080, () => {
     console.log('Server is running on port 8080');
 });
