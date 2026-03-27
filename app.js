@@ -124,7 +124,7 @@ app.delete('/listings/:id', wrapAsync(async (req, res) => {
     res.redirect('/listings');
 }));
 
-//Reviews
+//Post Reviews Route
 app.post('/listings/:id/reviews', validateReview, wrapAsync(async (req, res) => {
     let { id } = req.params
     let revListing = await listing.findById(id);
@@ -136,6 +136,18 @@ app.post('/listings/:id/reviews', validateReview, wrapAsync(async (req, res) => 
     res.redirect(`/listings/${id}`)
 }
 ));
+//Delete Review Route
+app.delete('/listings/:id/review/:reviewId', wrapAsync(async (req, res) => {
+    let { id, reviewId } = req.params; 
+    // 1. Review collection se delete
+    await Review.findByIdAndDelete(reviewId);
+    await listing.updateOne({ _id: id },
+        { $pull: { reviews: reviewId } }
+    );
+    res.redirect(`/listings/${id}`);
+
+}
+))
 app.use((req, res, next) => {
     next(new ExpressError("This page isn't exist on this Route", 404));
 });
