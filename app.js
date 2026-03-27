@@ -8,7 +8,7 @@ const path = require('path');
 const ejsMate = require('ejs-mate');
 const wrapAsync = require("./utils/wrapAsync.js")
 const ExpressError = require("./utils/ExpressError.js")
-const { listingSchema } = require("./schema.js") //joi Package
+const { listingSchema, reviewSchema } = require("./schema.js") //joi Package
 const Review = require('./models/review.js')
 
 app.engine('ejs', ejsMate);
@@ -39,7 +39,18 @@ const validateListing = (req, res, next) => {
     let { error } = listingSchema.validate(req.body);
     console.log(error);
     if (error) {
+        let errMsg = error.details.map(el => el.message).join(", ");
         throw new ExpressError(error, 400)
+    } else {
+        next();
+    }
+}
+const validateReview = (req, res, next) => {
+    let { error } = reviewSchema.validate(req.body);
+    console.log(error);
+    if (error) {
+        let errMsg = error.details.map(el => el.message).join(", ");
+        throw new ExpressError(errMsg, 400)
     } else {
         next();
     }
@@ -114,8 +125,8 @@ app.delete('/listings/:id', wrapAsync(async (req, res) => {
 }));
 
 //Reviews
-app.post('/listings/:id/reviews', wrapAsync(async (req, res) => {
-    let {id}=req.params
+app.post('/listings/:id/reviews', validateReview, wrapAsync(async (req, res) => {
+    let { id } = req.params
     let revListing = await listing.findById(req.params.id);
     let newreview = new Review(req.body.review);
     revListing.reviews.push(newreview);
@@ -134,7 +145,7 @@ app.use((err, req, res, next) => {
     console.log(err.stack);
     res.status(status).render('listings/error', { err })
     // res.status(status).send(err.message);
-}) 
+})
 app.listen(8080, () => {
     console.log('Server is running on port 8080');
 });
