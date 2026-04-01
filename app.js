@@ -6,6 +6,9 @@ const listing = require('./models/listing');
 const path = require('path');
 const ejsMate = require('ejs-mate');
 const ExpressError = require("./utils/ExpressError.js")
+//session and flash
+const session = require("express-session");
+const flash = require("connect-flash");
 
 
 app.engine('ejs', ejsMate);
@@ -15,6 +18,16 @@ app.use(methodOverride("_method"));
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '/public')));
+
+// session middleware and flash middleware
+const sessionOption = {
+    secret: "mysupersecretkey",   // encryption key
+    resave: false,
+    saveUninitialized: true,
+}
+app.use(session(sessionOption));
+app.use(flash());
+
 
 
 const listings = require('./routes/listing.js');
@@ -30,8 +43,8 @@ main().then(() => {
     console.error('Database connection error:', err);
 });
 
-app.use("/listings", listings);
 app.use("/listings/:id/reviews", reviewRoutes);
+app.use("/listings", listings);
 
 // Root route
 app.get('/', async (req, res) => {
