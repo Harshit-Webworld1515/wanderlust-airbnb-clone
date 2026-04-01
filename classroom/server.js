@@ -3,6 +3,12 @@ const app = express();
 const users = require("./routes/user.js");
 const posts = require("./routes/post.js");
 const session = require("express-session");
+const flash = require("connect-flash");
+const path = require('path');
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));gi
+
 
 const sessionOption = {
     secret: "mysupersecretkey",   // encryption key
@@ -11,6 +17,8 @@ const sessionOption = {
 }
 // session middleware
 app.use(session(sessionOption));
+// flash middleware
+app.use(flash());
 
 app.get("/register", (req, res) => {
     let { username="Ajay", password } = req.query;//default hai ajay
@@ -19,14 +27,28 @@ app.get("/register", (req, res) => {
         req.session.username = username;
         req.session.password = password;
         console.log(req.session.username);
-        res.send("Registration successful! for `" + username + "`");
+        console.log("Registration successful! for `" + username + "`");
+        req.flash("success", "Registration successful!");
+        res.redirect("/hello");
     }
     else {
-        res.send("Please provide username and password");
+        req.flash("error", "Please provide username and password");
+        res.redirect("/hello");
     }
 });
+//3rd alternative way to flash message
+app.use((req, res, next) => {
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
+});
 app.get("/hello", (req, res) => {
-    res.send("Hello, World from " + req.session.username);
+    // console.log(req.flash("success"));
+    // console.log(req.flash("error"));
+    //2nd alternative way to flash message
+    // res.locals.success = req.flash("success");
+    // res.locals.error = req.flash("error");
+    res.render("page.ejs", { username: req.session.username });
 });
 
 // app.get("/request-count", (req, res) => {
