@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashed Messages</title>
+</head>
+<body>
+    <h1>Hello, <%= username %>!</h1>
+    <% if (success && success.length > 0) { %>
+        <p style="color: green;"><%= success[0] %></p>  
+    <% } %>
+    <% if (error && error.length > 0) { %>
+        <p style="color: red;"><%= error[0] %></p>
+    <% } %>
+</body>
+</html>
