@@ -24,6 +24,11 @@ const sessionOption = {
     secret: "mysupersecretkey",   // encryption key
     resave: false,
     saveUninitialized: true,
+    cookie: {
+        httpOnly: true, // for security
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+    }
 }
 app.use(session(sessionOption));
 app.use(flash());
