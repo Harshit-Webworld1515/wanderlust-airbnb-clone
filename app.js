@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const listing = require('./models/listing');
 //Jo naam tum require me dete ho → wahi naam se tum Mongo operations karoge
 const path = require('path');
+// layout + partials support for ejs 
 const ejsMate = require('ejs-mate');
 const ExpressError = require("./utils/ExpressError.js")
 //session and flash
@@ -33,7 +34,12 @@ const sessionOption = {
 app.use(session(sessionOption));
 app.use(flash());
 
-
+app.use((req, res, next) => {
+    res.locals.success = req.flash("success");
+    console.log("Flash message set in res.locals:", res.locals.success);
+    res.locals.error = req.flash("error");
+    next();
+});
 
 const listings = require('./routes/listing.js');
 const reviewRoutes = require('./routes/review.js');
