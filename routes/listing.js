@@ -54,6 +54,7 @@ router.post('/', validateListing, wrapAsync(async (req, res, next) => {
     // }
 
     await newListing.save();
+    req.flash('success', 'Successfully made a new listing!');
     res.redirect('/listings');
 }));
 
@@ -62,11 +63,19 @@ router.get('/:id', wrapAsync(async (req, res) => {
 
     const { id } = req.params;
     const foundListing = await listing.findById(id).populate("reviews");
+    if (!foundListing) {
+        req.flash('error', 'Cannot find that listing!');
+        return res.redirect('/listings');
+    }
     res.render('listings/show', { foundListing });
 }));
 // Edit Route
 router.get('/:id/edit', wrapAsync(async (req, res) => {
     const edited = await listing.findById(req.params.id);
+    if (!edited) {
+        req.flash('error', 'Cannot find that listing!');
+        return res.redirect('/listings');
+    }
     res.render('listings/edit', { edited });
 }));
 // Update Route
@@ -80,6 +89,7 @@ router.put('/:id', wrapAsync(async (req, res) => {
         req.body.listing,
         { returnDocument: "after", runValidators: true }
     );
+    req.flash('success', 'Successfully updated the listing!');
     res.redirect(`/listings`);
 
 }));
@@ -87,6 +97,7 @@ router.put('/:id', wrapAsync(async (req, res) => {
 router.delete('/:id', wrapAsync(async (req, res) => {
     const { id } = req.params;
     await listing.findByIdAndDelete(id);
+        req.flash('success', 'Successfully deleted the listing!');
     res.redirect('/listings');
 }));
 module.exports = router;
