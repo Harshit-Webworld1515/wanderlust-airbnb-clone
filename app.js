@@ -51,8 +51,26 @@ app.use((req, res, next) => {
     next();
 });
 
-const listings = require('./routes/listing.js');
-const reviewRoutes = require('./routes/review.js');
+
+// app.get('/demoUser', async (req, res) => {
+//     const fakeUser = new User({
+//         username: 'deltaStudent',
+//         email: 'demouser@example.com'
+//     });
+//     const registeredUser = await User.register(fakeUser, 'password123');
+//      console.log("Registered user:", registeredUser);
+//      console.log("User ID:", registeredUser._id);
+//      console.log("Username:", registeredUser.username);
+//      console.log("Email:", registeredUser.email);
+//      console.log("Password hash (not the actual password):", registeredUser.password);
+//      console.log("Salt used for hashing:", registeredUser.salt);
+//     // await fakeUser.save();
+//     res.send(registeredUser);
+// });
+
+const listingRouter = require('./routes/listing.js');
+const reviewRouter= require('./routes/review.js');
+const userRouter = require('./routes/user.js');
 
 async function main() {
     await mongoose.connect('mongodb://localhost:27017/wanderlust');
@@ -64,8 +82,9 @@ main().then(() => {
     console.error('Database connection error:', err);
 });
 
-app.use("/listings/:id/reviews", reviewRoutes);
-app.use("/listings", listings);
+app.use("/listings/:id/reviews", reviewRouter);
+app.use("/listings", listingRouter);
+app.use("/", userRouter);
 
 // Root route
 app.get('/', async (req, res) => {
