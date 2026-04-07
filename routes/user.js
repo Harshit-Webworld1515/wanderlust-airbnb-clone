@@ -35,9 +35,10 @@ router.post('/login', passport.authenticate('local', {
 router.get('/logout', (req, res) => {
     req.logout(function (err) {
         if (err) {
-            console.error('Error during logout:', err);
+             console.error('Error during logout:', err);
             req.flash('error', 'An error occurred while logging out. Please try again.');
-            return res.redirect('/listings');
+            // return res.redirect('/listings');
+            return next(err);
         }
         req.flash('success', 'You have logged out successfully!');
         res.redirect('/listings');
