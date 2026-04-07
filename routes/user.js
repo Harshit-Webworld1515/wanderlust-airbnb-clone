@@ -22,5 +22,25 @@ router.post('/signup', wrapAsync(async (req, res) => {
         res.redirect('/signup');
     }
 }));
-
+router.get('/login', (req, res) => {
+    res.render('users/login');
+});
+router.post('/login', passport.authenticate('local', {
+    failureFlash: true,
+    failureRedirect: '/login'
+}), async(req, res) => {
+    req.flash('success', 'Welcome back! You have logged in successfully!');
+    res.redirect('/listings');
+});
+router.get('/logout', (req, res) => {
+    req.logout(function (err) {
+        if (err) {
+            console.error('Error during logout:', err);
+            req.flash('error', 'An error occurred while logging out. Please try again.');
+            return res.redirect('/listings');
+        }
+        req.flash('success', 'You have logged out successfully!');
+        res.redirect('/listings');
+    });
+});
 module.exports = router;
