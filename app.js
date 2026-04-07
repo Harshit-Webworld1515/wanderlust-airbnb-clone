@@ -46,8 +46,9 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
-    console.log("Flash message set in res.locals:", res.locals.success);
+    // console.log("Flash message set in res.locals:", res.locals.success);
     res.locals.error = req.flash("error");
+    res.locals.currentUser = req.user;
     next();
 });
 
