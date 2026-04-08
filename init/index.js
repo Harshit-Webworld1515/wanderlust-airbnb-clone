@@ -14,8 +14,11 @@ main().then(() => {
 });
 const initdb = async () => {
     try {
-        // await listing.deleteMany({});
-        // console.log('Existing listings cleared');
+        await listing.deleteMany({});
+        console.log('Existing listings cleared');
+        initdata.data=initdata.data.map((obj)=>
+            ({...obj,owner:"69d3f0c66e84613a5cd6910d"}
+        ));
         await listing.insertMany(initdata.data);
         console.log('Database initialized with sample data');
     } catch (err) {
