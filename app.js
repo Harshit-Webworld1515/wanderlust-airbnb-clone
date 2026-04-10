@@ -48,6 +48,7 @@ app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     // console.log("Flash message set in res.locals:", res.locals.success);
     res.locals.error = req.flash("error");
+    // currentUser only use for login signup and logout in navbar,edit delete button 
     res.locals.currentUser = req.user;
     next();
 });
