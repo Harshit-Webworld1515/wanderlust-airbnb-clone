@@ -1,8 +1,9 @@
 const listing = require('./models/listing');
+const Review = require('./models/review');
 const { listingSchema,reviewSchema } = require("./schema.js") //joi Package
 const ExpressError = require("./utils/ExpressError.js");
 
-
+//middleware functions to check if user is logged in 
 module.exports.isLoggedIn = (req, res, next) => {
     console.log(req.user);
     // console.log(req.path,",,",req.originalUrl); -->/new ,, /listings/new
@@ -14,6 +15,7 @@ module.exports.isLoggedIn = (req, res, next) => {
     }
     next();
 }
+//middleware function to save the redirect url in the session and make it available to the template
 module.exports.saveRedirectUrl = (req, res, next) => {
     if (req.session.redirectUrl) {
         res.locals.redirectUrl = req.session.redirectUrl; // Make the redirect URL available to the template
@@ -21,6 +23,7 @@ module.exports.saveRedirectUrl = (req, res, next) => {
     }
     next();
 }
+//middleware function to check if the user is the owner of the listing
 module.exports.isOwner = async (req, res, next) => {
     const { id } = req.params;
     const listed = await listing.findById(id);
@@ -50,4 +53,15 @@ module.exports.validateReview = (req, res, next) => {
     } else {
         next();
     }
+}
+//middleware function to check if the user is the author of the review
+module.exports.isReviewAuthor = async (req, res, next) => {
+    const {reviewId, id } = req.params;
+    const review = await Review.findById(reviewId);
+    if (!review.author.equals(res.locals.currentUser._id)) {
+        req.flash(`error`, `You haven't aothority to make change that review!`);
+        return res.redirect(`/listings/${id}`);
+    }
+    
+    next();
 }
