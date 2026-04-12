@@ -73,12 +73,14 @@
                                                 <p class="card-text">
                                                     <%= review.rating %>star
                                                 </p>
+                                                <!-- show delete button only to the author of the review -->
+                                                <% if (currentUser && currentUser._id.equals(review.author._id)) { %>
                                                 <form
                                                     action="/listings/<%=foundListing._id%>/reviews/<%= review._id %>?_method=DELETE"
                                                     method="post">
                                                     <button class="btn btn-outline-danger">Delete</button>
                                                 </form>
-
+                                                <% } %>
                                             </div>
                                         </div>
                                         <% } %>
