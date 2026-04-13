@@ -7,15 +7,23 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const { saveRedirectUrl } = require('../middleware.js');
 
 const userControllers = require('../controllers/users.js');
-
-router.get('/signup', userControllers.renderSignupForm);
-router.post('/signup', wrapAsync(userControllers.signup));
-router.get('/login', userControllers.renderLoginForm);
-router.post('/login', saveRedirectUrl, passport.authenticate('local', {
-    failureFlash: true,
-    failureRedirect: '/login'
-}),userControllers.login);
-router.get('/logout',userControllers.logout);
+//router.route() is used to chain multiple route handlers for a specific path.
+router.route('/signup')
+    // Render the signup form
+    .get(userControllers.renderSignupForm)
+    // Handle the signup form submission
+    .post(wrapAsync(userControllers.signup));
+router.route('/login')
+    // Render the login form
+    .get(userControllers.renderLoginForm)
+    // Handle the login form submission
+    .post(saveRedirectUrl, passport.authenticate('local', {
+        failureFlash: true,
+        failureRedirect: '/login'
+    }), userControllers.login);
+    // Handle logout
+router.route('/logout')
+    .get(userControllers.logout);
 module.exports = router;
 
 
