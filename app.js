@@ -1,3 +1,11 @@
+if (process.env.NODE_ENV !== 'production') {
+    console.log("Loading environment variables from .env file");
+    require('dotenv').config();
+}
+// Debugging line to check if the environment variable is loaded
+console.log("Environment variable SECRET:", process.env.SECRET);
+
+
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
