@@ -12,7 +12,7 @@ module.exports.index=async (req, res) => {
     }
 }
 module.exports.renderNewForm=async (req, res) => {
-    console.log(req.user)
+    console.log(req.user)//logged in user details
     console.log('Accessing /listings/new route');
     // if (!req.isAuthenticated()) {
     //     req.flash('error', 'You must be signed in to create a listing!');
@@ -44,7 +44,12 @@ module.exports.createListing=(async (req, res, next) => {
     // if ( !req.body.listing) {
     //     throw new ExpressError("Send valid data for listing", 400);
     // }
+    let url=req.file.path;
+    let filename=req.file.filename;
+    req.body.listing.image={url,filename};
+    
 
+    console.log('File upload details:', { url, filename });
     const newListing = new listing(req.body.listing)
     console.log('New listing data:', req.body);
     //if we make post fro hopscotch give only listing[title]Then we need to makesure everything is needed
