@@ -33,7 +33,9 @@ router.route('/')
     //show route
     .get(wrapAsync(listingController.showListing))
     //update route
-    .put(isLoggedIn, isOwner,validateListing, wrapAsync(listingController.updateListing))
+    .put(isLoggedIn, isOwner,
+        validateListing,upload.single('listing[image][url]'),
+         wrapAsync(listingController.updateListing))
     //delete route
     .delete(isLoggedIn,isOwner, wrapAsync(listingController.destroyListing));
     module.exports = router;
