@@ -75,7 +75,10 @@ module.exports.renderEditForm=(async (req, res) => {
         req.flash('error', 'Cannot find that listing!');
         return res.redirect('/listings');
     }
-    res.render('listings/edit', { edited });
+    let originalUrl=edited.image.url; 
+    originalUrl=originalUrl.replace("/uploads/", "/uploads/w_300"); // Replace backslashes with forward slashes for Windows paths
+    console.log('Editing listing image url:', originalUrl);
+    res.render('listings/edit', { edited, originalUrl });
 })
 module.exports.updateListing=(async (req, res) => {
     if (!req.body.listing) {
@@ -83,11 +86,18 @@ module.exports.updateListing=(async (req, res) => {
     }
     const { id } = req.params;
     
-    await listing.findByIdAndUpdate(
+    const updatedListing = await listing.findByIdAndUpdate(
         id,
         req.body.listing,
         { returnDocument: "after", runValidators: true }
     );
+    if(req.file){
+    let url=req.file.path;
+    let filename=req.file.filename;
+        updatedListing.image={url,filename};
+        await updatedListing.save();
+    }
+
     req.flash('success', 'Successfully updated the listing!');
     res.redirect(`/listings/${id}`);
 
