@@ -1,29 +1,141 @@
 <% layout('layouts/boilerplate') %>
 
-    <body>
-        <h1>Wanderlust</h1>
-        <p>Welcome to the Wanderlust!</p>
-        <!-- <form action="/listings/new" method="GET">
+    <style>
+       /* #filters {
+            /* display: flex; */
+            /* justify-content: center; */
+            /* gap: 2rem; */
+            /* margin-bottom: 2rem; 
+        }*/
+
+        .filters-wrapper {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            /*  scroll aa jayega Horizontal */
+        }
+
+        .filter {
+            display: flex;
+            margin-top: 1rem;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            opacity: .7;
+        }
+
+        .filter:hover {
+            opacity: 1;
+        }
+
+        /* .filter i {
+        font-size: 1.5rem;
+    } */
+        .filter p {
+            font-size: .8rem;
+            margin-top: .5rem;
+        }
+
+        .tax-toggle {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+    <!-- <h1>Wanderlust</h1> -->
+    <!-- <p>Welcome to the Wanderlust!</p> -->
+    <!-- <button class="btn btn-primary d-lg-none mb-3" data-bs-toggle="collapse" data-bs-target="#filters">
+        ☰ Show Menu
+    </button> -->
+    <!-- <div id="filters" class="collapse d-lg-block"> -->
+        <div class="filters-wrapper">
+            <div class="filter">
+                <i class="fa-solid fa-fire"></i>
+                <p>Trending</p>
+            </div>
+            <div class="filter">
+                <i class="fa-solid fa-earth-americas"></i>
+                <p>International</p>
+            </div>
+            <div class="filter">
+                <i class="fa-solid fa-house"></i>
+                <p>Domestic</p>
+            </div>
+            <div class="filter">
+                <i class="fa-solid fa-mountain-sun"></i>
+                <p>Nature</p>
+            </div>
+            <div class="filter">
+                <i class="fa-solid fa-bed"></i>
+                <p>Rooms</p>
+            </div>
+            <div class="filter">
+                <i class="fa-solid fa-campground"></i>
+                <p>Camping</p>
+            </div>
+            <div class="filter">
+                <i class="fa-solid fa-umbrella-beach"></i>
+                <p>Beach</p>
+            </div>
+            <div class="filter">
+                <i class="fa-solid fa-skiing"></i>
+                <p>Snow</p>
+            </div>
+            <div class="filter">
+                <i class="fa-solid fa-city"></i>
+                <p>Iconic cities</p>
+            </div>
+            <div class="filter">
+                <i class="fa-solid fa-mountain"></i>
+                <p>Mountain</p>
+            </div>
+            <div class="filter">
+                <i class="fa-solid fa-tree"></i>
+                <p>Forest</p>
+            </div>
+            <div class="filter">
+                <i class="fa-solid fa-fort-awesome"></i>
+                <p>Castle</p>
+            </div>
+            <div class="filter">
+                <i class="fa-solid fa-swimmer"></i>
+                <p>Amazing Pools</p>
+            </div>
+            <div class="tax-toggle">
+                <div class="form-check-reverse form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+                    <label class="form-check-label" for="switchCheckDefault">Display total after Taxes</label>
+                </div>
+            </div>
+        </div>
+
+    <!-- </div> -->
+    <!-- <form action="/listings/new" method="GET">
         <button>new</button>
     </form> -->
-        <!-- This is just a temporary button to test the route, we will replace it with a link in the navbar later -->
+    <!-- This is just a temporary button to test the route, we will replace it with a link in the navbar later -->
 
 
-        <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4">
-            <% for (const listing of allListings) { %>
-                <a href="/listings/<%= listing._id %>" class="listing-link">
-                    <div class="card col">
-                        <img src="<%= listing.image.url %>" class="card-img-top" alt="listing image"
-                            style="height: 20rem;">
-                            <!-- card overlay image -->
-                            <div class="card-img-overlay">Ram </div>
-                        <div class="card-body">
-                            <p class="card-text"><strong>
-                                    <%= listing.title %>
-                                </strong> <br>₹<%= listing.price.toLocaleString("en-IN") %>/night</p>
-                        </div>
+    <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-2 row-cols-1 g-4">
+        <% for (const listing of allListings) { %>
+            <a href="/listings/<%= listing._id %>" class="listing-link">
+                <div class="card col">
+                    <img src="<%= listing.image.url %>" class="card-img-top" alt="listing image" style="height: 20rem;">
+                    <!-- card overlay image -->
+                    <div class="card-img-overlay">Ram </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>
+                                <%= listing.title %>
+                            </strong> <br>₹<%= listing.price.toLocaleString("en-IN") %>/night</p>
                     </div>
-                </a>
-                <% } %>
-        </div>
-    </body>
+                </div>
+            </a>
+            <% } %>
+    </div>
+    <script>
+        let taxSwitcher = document.getElementById('switchCheckDefault');
+        taxSwitcher.addEventListener('click', function () {
+            console.log('clicked');
+        });
+    </script>

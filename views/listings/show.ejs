@@ -3,12 +3,12 @@
     <body>
 
         <div class="row mt-3">
-            <div class="col-8 offset-3">
+            <div class="col-10 offset-1 col-md-8 offset-md-3">
                 <h1>
                     <%= foundListing.title %>
                 </h1>
             </div>
-            <div class="card col-6 offset-3 show-card">
+            <div class="col-10 offset-1 col-md-8 offset-md-3 show-card">
                 <img src="<%= foundListing.image.url %>" class="card-img-top show-img" alt="<%= foundListing.title %>">
                 <p class="card-text">Owner: <i>
                         <%= foundListing.owner.username %>
@@ -24,19 +24,18 @@
                         <%= foundListing.location %>,
                             <%= foundListing.country %>
                     </p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
                 </div>
             </div>
             <!-- show edit and delete buttons only to the owner of the listing -->
             <% if (currentUser && currentUser._id.equals(foundListing.owner._id)) { %>
-                <div class="btns mb-3">
-                    <a class="btn btn-dark offset-3" href="/listings/<%= foundListing._id %>/edit">Edit</a>
+                <div class="btns mt-3">
+                    <a class="btn btn-dark offset-1 offset-md-3" href="/listings/<%= foundListing._id %>/edit">Edit</a>
                     <form action="/listings/<%= foundListing._id %>?_method=DELETE" method="POST">
-                        <button class="btn btn-dark offset-5">Delete</button>
+                        <button class="btn btn-dark offset-1 offset-md-3">Delete</button>
                     </form>
                 </div>
                 <% } %>
-                    <div class="col-8 offset-3">
+                    <div class="col-10 offset-1 col-md-8 offset-md-3">
                         <hr>
                         <!-- Review Form visible to logged-in users -->
                         <% if (currentUser) { %>
@@ -80,7 +79,7 @@
                                         <hr>
                                         <p><b>All Reviews</b></p>
                                         <% for (const review of foundListing.reviews){ %>
-                                            <div class="card col-5 mb-3 ms-3">
+                                            <div class="card col-10 offset-1 col-md-8 offset-md-3 mb-3 ms-3">
                                                 <div class="card-body">
                                                     <!-- show username -->
                                                     <h5 class="card-title">
