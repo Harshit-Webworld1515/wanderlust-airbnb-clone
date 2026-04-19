@@ -32,8 +32,9 @@ const listingSchema = new mongoose.Schema({
    },
    category: {
       type: String,
-      enum: ['Beach', 'Mountain', 'City', 'Countryside', 'Adventure', 'Cultural', 'Family', 'Romantic', 'Wildlife', 'Historical'],
-      required: true
+      enum: ['Trending', 'Domestic', 'Beach', 'Mountain', 'Nature', 'Countryside', 'Adventure', 'Cultural', 'Family', 'Romantic', 'Wildlife', 'Historical'],
+      required: true,
+      default: 'Trending'
    }
 });
 // Mongoose middleware to delete associated reviews when a listing is deleted
