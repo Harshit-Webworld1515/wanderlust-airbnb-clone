@@ -15,7 +15,7 @@
                     </i></p>
                 <div class="card-body">
                     <p class="card-text">
-                        <%= foundListing.description %>
+                       <%= foundListing.category %>: <%= foundListing.description %>
                     </p>
                     <p class="card-text">
                         <%= foundListing.price.toLocaleString("en-IN") %>/night
@@ -74,6 +74,7 @@
                             </form>
                             <% } %>
                                 <!-- <hr> -->
+                                 <!-- Show reviews if it exists -->
                                 <% if(foundListing.reviews.length> 0) { %>
                                     <div class=" row ">
                                         <hr>
