@@ -17,6 +17,8 @@ const ejsMate = require('ejs-mate');
 const ExpressError = require("./utils/ExpressError.js")
 //session and flash
 const session = require("express-session");
+// MongoDB session storeing library, which allows us to store session data in MongoDB instead of in memory. This is important for production applications, as it allows sessions to persist across server restarts and can also help with scaling the application across multiple servers.
+const MongoStore = require('connect-mongo').default;
 const flash = require("connect-flash");
 // Passport.js for authentication
 const passport = require("passport");
@@ -32,8 +34,18 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '/public')));
 
+// Create a MongoDB session store which will store session data in the MongoDB database. This allows sessions to persist even if the server restarts, and it can also help with scaling the application across multiple servers.
+const store = MongoStore.create({
+    mongoUrl: process.env.ATLASDB_URL || 'mongodb://localhost:27017/wanderlust',
+    crypto: {secret: "mysupersecretkey"},
+    touchAfter: 24 * 60 * 60 // time period in seconds
+});
+store.on("error", function(e) {
+    console.log("Session store error:", e);
+});
 // session middleware and flash middleware
 const sessionOption = {
+    store: store,
     secret: "mysupersecretkey",   // encryption key
     resave: false,
     saveUninitialized: true,
@@ -43,7 +55,8 @@ const sessionOption = {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
     }
 }
-app.use(session(sessionOption));
+
+app.use(session({ ...sessionOption, store }));
 app.use(flash());
 // Passport.js configuration
 app.use(passport.initialize());
@@ -82,8 +95,9 @@ const listingRouter = require('./routes/listing.js');
 const reviewRouter= require('./routes/review.js');
 const userRouter = require('./routes/user.js');
 
+CONNECT_DB_URL = process.env.ATLASDB_URL || 'mongodb://localhost:27017/wanderlust';
 async function main() {
-    await mongoose.connect('mongodb://localhost:27017/wanderlust');
+    await mongoose.connect(CONNECT_DB_URL);
     console.log('Connected to MongoDB');
 }
 main().then(() => {
