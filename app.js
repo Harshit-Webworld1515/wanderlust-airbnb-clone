@@ -37,7 +37,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 // Create a MongoDB session store which will store session data in the MongoDB database. This allows sessions to persist even if the server restarts, and it can also help with scaling the application across multiple servers.
 const store = MongoStore.create({
     mongoUrl: process.env.ATLASDB_URL || 'mongodb://localhost:27017/wanderlust',
-    crypto: {secret: "mysupersecretkey"},
+    crypto: {secret: process.env.SESSION_SECRET},
     touchAfter: 24 * 60 * 60 // time period in seconds
 });
 store.on("error", function(e) {
@@ -46,7 +46,7 @@ store.on("error", function(e) {
 // session middleware and flash middleware
 const sessionOption = {
     store: store,
-    secret: "mysupersecretkey",   // encryption key
+    secret: process.env.SESSION_SECRET,   // encryption key
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -111,10 +111,10 @@ app.use("/listings", listingRouter);
 app.use("/", userRouter);
 
 // Root route
-app.get('/', async (req, res) => {
-    let listings = await listing.find();
-    res.send(listings);
-});
+// app.get('/', async (req, res) => {
+//     let listings = await listing.find();
+//     res.send(listings);
+// });
 
 app.use((req, res, next) => {
     next(new ExpressError("This page isn't exist on this Route", 404));
@@ -126,6 +126,6 @@ app.use((err, req, res, next) => {
     res.status(status).render('listings/error', { err })
     // res.status(status).send(err.message);
 })
-app.listen(8080, () => {
-    console.log('Server is running on port 8080');
+app.listen(process.env.PORT, () => {
+    console.log('Server is running on port ' + (process.env.PORT));
 });
