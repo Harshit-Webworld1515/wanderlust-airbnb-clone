@@ -105,6 +105,7 @@ Visit → http://localhost:8080
 
 ---
 
+
 ## 🔮 Future Improvements
 
 * 🔍 Advanced Search & Filters
@@ -124,6 +125,25 @@ Visit → http://localhost:8080
 ## 🙌 Acknowledgment
 
 Inspired by Airbnb and built as a learning project.
+
+---
+## 📸 Screenshots
+
+🔍 Home Page
+<img width="1877" height="1009" alt="image" src="https://github.com/user-attachments/assets/4ad90aea-bbf4-4360-b3b9-a24e34d5cb35" />
+
+
+📄 Listing Page
+<img width="1881" height="1021" alt="image" src="https://github.com/user-attachments/assets/5aeafefd-08a2-40e0-874a-c86bb3a49b26" />
+
+
+➕ Create Listing
+<img width="1881" height="1020" alt="image" src="https://github.com/user-attachments/assets/6fdaf251-3ee1-4f91-a910-7f118a80b435" />
+
+
+⭐ Reviews & Interaction
+<img width="1857" height="1034" alt="image" src="https://github.com/user-attachments/assets/2cd6636d-da60-4357-b04f-5c1a7af35cd5" />
+
 
 ---
 
